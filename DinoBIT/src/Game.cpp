@@ -4,7 +4,7 @@ char Game::console_input_value = '\0';
 std::string Game::console_output = "";
 
 int Game::player_position = 1;
-int Game::player_jump_span = 2;
+int Game::player_jump_span = 3;
 int Game::player_speed = 1;
 
 bool Game::game_jump_flag = false;
@@ -14,15 +14,16 @@ std::deque<bool> Game::game_play_area(Game::game_play_area_size, false);
 
 void Game::ClearScreen()
 {
-    std::cout << "\033[2J\033[1;1H";
+    //std::cout << std::endl;
+    std::cout << "\033[2J\033[1;1H"<< std::flush;
 }
 
 void Game::Display(const std::string& str)
 {
     if (!str.length())
-        std::cout << console_output << std::endl;
+        std::cout << console_output << "\n";
     else
-        std::cout << str << std::endl;
+        std::cout << str << "\n";
 }
 
 void Game::Sleep()
@@ -36,9 +37,11 @@ std::string Game::GenerateFrame()
     std::string result = "";
     for (auto it = game_play_area.begin(); it != game_play_area.end(); it++)
     {
-        result += std::to_string(*it);
+        result += (*it) ? "T" : "-";
     }
 
+    result[0] = 'x';
+    result = "__" + result;
     return result;
 }
 

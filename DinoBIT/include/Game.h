@@ -5,7 +5,6 @@
 #include <conio.h>
 #include <string>
 #include <deque>
-
 class Game
 {
 public:
@@ -30,7 +29,8 @@ public:
     static void Display(const std::string& str = "");
     static void Sleep();
 
-
+    static bool GameOverConditions();
+    static bool IsInteractionAllowed();
     static void Move();
     static std::string GenerateFrame();
 
