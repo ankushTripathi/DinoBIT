@@ -37,11 +37,11 @@ std::string Game::GenerateFrame()
     std::string result = "";
     for (auto it = game_play_area.begin(); it != game_play_area.end(); it++)
     {
-        result += (*it) ? "T" : "-";
+        result += (*it) ? 'T' : '-';
     }
 
     result[0] = 'x';
-    result = "__" + result;
+    result = "--" + result;
     return result;
 }
 

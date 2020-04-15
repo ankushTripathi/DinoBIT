@@ -29,16 +29,15 @@ bool Game::Run()
         }
     }
 
-
-    if (GameOverConditions())
-    {
-        console_output = "Game Over";
-        return false;
-    }
-
     Move();
     console_output = GenerateFrame();
     if (game_jump_flag) console_output += "\n JUMPED !";
+
+    if (GameOverConditions())
+    {
+        console_output += "\nGame Over";
+        return false;
+    }
 
     return true;
 }
