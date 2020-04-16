@@ -4,8 +4,18 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Logic.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Win32Console.cpp" />
+    <ClCompile Include="src\ConsoleFactory.cpp" />
+    <ClCompile Include="src\Win64Console.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Game.h" />
+    <ClInclude Include="include\Player.h" />
+    <ClInclude Include="include\Win32Console.h" />
+    <ClInclude Include="include\ConsoleFactory.h" />
+    <ClInclude Include="include\Console.h" />
+    <ClInclude Include="include\Win64Console.h" />
+    <ClInclude Include="include\Config.h" />
   </ItemGroup>
 </Project>

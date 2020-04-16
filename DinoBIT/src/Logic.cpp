@@ -2,43 +2,46 @@
 
 bool Game::GameOverConditions()
 {
-    return !((player_position % game_mine_pos) && ((player_position + 1) % game_mine_pos));
+    return !((player.GetPosition() % game_mine_pos) && ((player.GetPosition() + 1) % game_mine_pos));
 }
 
 
 bool Game::IsInteractionAllowed()
 {
-    return ((player_position+1)% game_mine_pos);
+    return ((player.GetPosition()+1)% game_mine_pos);
 }
 
 bool Game::Run()
 {
     game_jump_flag = false;
 
-    if (IsInteractionAllowed() && _kbhit())
+    if (IsInteractionAllowed() && console->KeyPressed())
     {
-        if ((console_input_value = _getch()) == console_exit_key)
+        if (console->IsExitKey())
         {
-            console_output = "Exiting";
+            console->SetOutput("Exiting");
             return false;
         }
-        else if (console_input_value == console_jump_key)
+        else if (console->IsJumpKey())
         {
             game_jump_flag = true;
-            player_position += player_jump_span;
+            player.Jump();
         }
     }
 
     Move();
-    console_output = GenerateFrame();
-    if (game_jump_flag) console_output += "\n JUMPED !";
+    
+    std::string str = GenerateFrame();
+    if (game_jump_flag) str += "\n JUMPED !";
 
     if (GameOverConditions())
     {
-        console_output += "\nGame Over";
+        str += "\nGame Over";
+        console->SetOutput(str);
         return false;
     }
 
+    console->SetOutput(str);
     return true;
 }
 
@@ -46,7 +49,7 @@ bool Game::Run()
 void Game::Move()
 {
     if (!game_jump_flag)
-        player_position += player_speed;
+        player.Run();
 
     game_play_area.pop_front();
     game_position++;
@@ -58,7 +61,8 @@ void Game::Move()
 
     if (game_jump_flag)
     {
-        int j = player_jump_span;
+        int j = player.GetJumpSpan();
+
         while (--j)
         {
             game_play_area.pop_front();
