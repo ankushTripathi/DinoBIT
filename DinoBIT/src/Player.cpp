@@ -22,6 +22,7 @@ int Player::GetJumpSpan()
 void Player::Run()
 {
 	position += speed;
+	SetScore(position);
 }
 
 void Player::Jump()

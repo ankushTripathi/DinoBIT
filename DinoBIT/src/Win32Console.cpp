@@ -32,6 +32,11 @@ void Win32Console::SetOutput(std::string output)
     this->output = output;
 }
 
+void Win32Console::DecrementFameRate()
+{
+    this->frame_rate -= FRAME_RATE_REDUCTION;
+}
+
 bool Win32Console::KeyPressed()
 {
     bool result = _kbhit();
@@ -48,6 +53,7 @@ bool Win32Console::IsJumpKey()
 {
     return (input_value == jump_key);
 }
+
 
 Win32Console::~Win32Console()
 {

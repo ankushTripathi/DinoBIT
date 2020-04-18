@@ -22,5 +22,6 @@ public:
     virtual bool IsJumpKey() = 0;
 
     virtual void SetOutput(std::string) = 0;
+    virtual void DecrementFameRate() = 0;
 };
 

@@ -3,22 +3,24 @@
 Console* Game::console = ConsoleFactory::GetConsole();
 Player Game::player = Player();
 
-bool Game::game_jump_flag = false;
-int Game::game_position = Game::game_play_area_size - 1;
-int Game::game_mine_pos = MAX_TREE_DISTANCE;
-std::deque<bool> Game::game_play_area(Game::game_play_area_size, false);
+std::mt19937 Game::eng{ std::random_device{}() };
+
+bool Game::jump_flag = false;
+int Game::last_frame = Game::play_area_size - 1;
+int Game::last_tree_position = 0;
+std::deque<bool> Game::play_area(Game::play_area_size, false);
 
 std::string Game::GenerateFrame()
 {
 
     std::string result = "";
-    for (auto it = game_play_area.begin(); it != game_play_area.end(); it++)
+    for (auto it = play_area.begin(); it != play_area.end(); it++)
     {
-        result += (*it) ? 'T' : '-';
+        result += (*it) ? TREE_SYMBOL : BLANK_SYMBOL;
     }
 
-    result[0] = 'x';
-    result = "--" + result;
+    result[0] = DINO_SYMBOL;
+    result = std::string(INITAL_PADDING, BLANK_SYMBOL) + result;
     return result;
 }
 
@@ -28,10 +30,15 @@ void Game::Start()
     console->Display("Welcome To DinBIT (press [space] to jump .. 'q' to quit)");
     std::cin.get();
 
-    for (int i = 1; (i * game_mine_pos) <= game_play_area_size; i++)
+    for (int i = 1;i < play_area_size; i++)
     {
-        game_play_area[(i * 1LL * game_mine_pos) - 1] = true;
+        if (ShouldPlaceTree(i))
+        {
+            play_area[i] = true;
+            last_tree_position = i;
+        }
     }
+
     console->SetOutput(GenerateFrame());
 }
 

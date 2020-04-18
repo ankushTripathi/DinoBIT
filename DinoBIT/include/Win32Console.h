@@ -21,6 +21,7 @@ public :
     void Sleep();
 
     void SetOutput(std::string output);
+    void DecrementFameRate();
 
     bool KeyPressed();
     bool IsExitKey();

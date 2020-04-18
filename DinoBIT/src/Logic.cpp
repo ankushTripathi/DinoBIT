@@ -2,20 +2,25 @@
 
 bool Game::GameOverConditions()
 {
-    return !((player.GetPosition() % game_mine_pos) && ((player.GetPosition() + 1) % game_mine_pos));
+    return (play_area[0] || play_area[1]);
+}
+
+bool Game::IsLevelUp()
+{
+    return !((last_frame + 1) % (LEVEL_UP_FACTOR * play_area_size));
 }
 
 
-bool Game::IsInteractionAllowed()
+void Game::LevelUp()
 {
-    return ((player.GetPosition()+1)% game_mine_pos);
+    console->DecrementFameRate();
 }
 
 bool Game::Run()
 {
-    game_jump_flag = false;
+    jump_flag = false;
 
-    if (IsInteractionAllowed() && console->KeyPressed())
+    if(console->KeyPressed())
     {
         if (console->IsExitKey())
         {
@@ -24,19 +29,27 @@ bool Game::Run()
         }
         else if (console->IsJumpKey())
         {
-            game_jump_flag = true;
+            jump_flag = true;
             player.Jump();
         }
     }
 
+
+     if (IsLevelUp())
+    {
+         Game::LevelUp();
+    }
+
+
     Move();
     
     std::string str = GenerateFrame();
-    if (game_jump_flag) str += "\n JUMPED !";
+    if (jump_flag) str += "\n JUMPED !";
 
     if (GameOverConditions())
     {
         str += "\nGame Over";
+        str += "\n Final Score :" + std::to_string(player.GetScore());
         console->SetOutput(str);
         return false;
     }
@@ -46,32 +59,46 @@ bool Game::Run()
 }
 
 
+bool Game::ShouldPlaceTree(int frame)
+{
+    if (frame - last_tree_position >= MAX_TREE_DISTANCE)
+        return std::uniform_int_distribution<std::mt19937::result_type>{0,1}(eng);
+    
+    return false;
+}
+
 void Game::Move()
 {
-    if (!game_jump_flag)
+    if (!jump_flag)
         player.Run();
 
-    game_play_area.pop_front();
-    game_position++;
+    play_area.pop_front();
+    last_frame++;
 
-    if ((game_position + 1)% game_mine_pos == 0)
-        game_play_area.push_back(true);
+    if (ShouldPlaceTree(last_frame))
+    {
+        play_area.push_back(true);
+        last_tree_position = last_frame;
+    }
     else
-        game_play_area.push_back(false);
+        play_area.push_back(false);
 
-    if (game_jump_flag)
+    if (jump_flag)
     {
         int j = player.GetJumpSpan();
 
         while (--j)
         {
-            game_play_area.pop_front();
-            game_position++;
+            play_area.pop_front();
+            last_frame++;
 
-            if ((game_position + 1) % game_mine_pos == 0)
-                game_play_area.push_back(true);
+            if (ShouldPlaceTree(last_frame))
+            {
+                play_area.push_back(true);
+                last_tree_position = last_frame;
+            }
             else
-                game_play_area.push_back(false);
+                play_area.push_back(false);
         }
     }
 }
