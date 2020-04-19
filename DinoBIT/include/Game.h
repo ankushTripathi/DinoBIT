@@ -39,5 +39,8 @@ public:
 
     static void Start();
     static void Loop();
+    static bool ShouldRestart();
+    static void Restart();
+
     static void End();
 };

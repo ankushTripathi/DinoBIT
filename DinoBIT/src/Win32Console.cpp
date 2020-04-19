@@ -37,6 +37,11 @@ void Win32Console::DecrementFameRate()
     this->frame_rate -= FRAME_RATE_REDUCTION;
 }
 
+void Win32Console::WaitForInput()
+{
+    std::cin.get(input_value);
+}
+
 bool Win32Console::KeyPressed()
 {
     bool result = _kbhit();

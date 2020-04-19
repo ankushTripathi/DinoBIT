@@ -23,6 +23,7 @@ public :
     void SetOutput(std::string output);
     void DecrementFameRate();
 
+    void WaitForInput();
     bool KeyPressed();
     bool IsExitKey();
     bool IsJumpKey();

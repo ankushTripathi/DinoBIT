@@ -20,18 +20,10 @@ bool Game::Run()
 {
     jump_flag = false;
 
-    if(console->KeyPressed())
+    if(console->KeyPressed() && console->IsJumpKey())
     {
-        if (console->IsExitKey())
-        {
-            console->SetOutput("Exiting");
-            return false;
-        }
-        else if (console->IsJumpKey())
-        {
-            jump_flag = true;
-            player.Jump();
-        }
+        jump_flag = true;
+        player.Jump();
     }
 
 
@@ -42,14 +34,13 @@ bool Game::Run()
 
 
     Move();
-    
+   
     std::string str = GenerateFrame();
     if (jump_flag) str += "\n JUMPED !";
 
     if (GameOverConditions())
     {
         str += "\nGame Over";
-        str += "\n Final Score :" + std::to_string(player.GetScore());
         console->SetOutput(str);
         return false;
     }

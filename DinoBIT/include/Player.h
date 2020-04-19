@@ -9,7 +9,7 @@ protected:
     int speed;
     int jump_span;
     int score;
-    int high_score;
+    static int high_score;
 
 public :
     

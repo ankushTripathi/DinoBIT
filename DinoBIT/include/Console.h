@@ -17,6 +17,7 @@ public:
     virtual void Display(const std::string& str = "") = 0;
     virtual void Sleep() = 0;
     
+    virtual void WaitForInput() = 0;
     virtual bool KeyPressed() = 0;
     virtual bool IsExitKey() = 0;
     virtual bool IsJumpKey() = 0;
